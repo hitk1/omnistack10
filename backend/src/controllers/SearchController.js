@@ -20,6 +20,6 @@ module.exports = {
             }
         })  
 
-        return resp.json({ message: 'deu bom'})
+        return resp.json(devs)
     }
 }
