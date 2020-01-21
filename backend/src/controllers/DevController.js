@@ -1,5 +1,6 @@
 const axios = require('axios')
 const Dev = require('../models/Dev')
+const { findConnections, sendMessage } = require('../websocket')
 
 module.exports = {
 
@@ -20,6 +21,13 @@ module.exports = {
             const { name = login, avatar_url, bio } = response.data
 
             dev = await Dev.create({ github_username, name, avatar_url, bio, techs, location })
+
+            //Filtrar as conexões que estão a no máximo 10km de distancia e que o novo dev tenha pelo menos 1 das techs filtradas
+
+            const sendSocketMessageTo = findConnections( { latitude, longitude}, techs )
+
+            
+            sendMessage(sendSocketMessageTo, 'new-dev', dev)
         }
 
         return resp.json(dev)
